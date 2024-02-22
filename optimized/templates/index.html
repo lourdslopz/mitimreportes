@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang='es' style="height:100%;">
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Reporte de Inspección</title>
+    <link rel="icon" type="image/x-icon" href="static\img\logo.ico">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=DM+Sans');
+
+
+        :root {
+            --morado: #444284;
+            --negro: #2a2a2a;
+
+        }
+
+
+        body {
+            background-color: #00000013;
+            font-family: 'DM Sans', sans-serif;
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-content: center;
+            flex-direction: column;
+        }
+
+        .content {
+            background-color: rgb(255, 255, 255);
+            padding: 15px 0 0 0;
+            border-radius: 10px;
+            margin: 15px 0 0 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: auto;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 7px 0;
+            background-color: var(--morado);
+        }
+
+        .navbar img {
+            width: 50px;
+            height: 35px;
+            margin-left: 10px;
+        }
+
+        .ml-auto {
+            margin-right: 20px;
+        }
+
+        .ml-auto:hover {
+            cursor: pointer;
+        }
+
+        .form-group label {
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select {
+            border-radius: 20px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            margin: 17px 0 30px 0;
+            background-color: rgb(35, 94, 145);
+            border-style: none;
+            border-radius: 10px;
+            padding: 7px;
+
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(26, 76, 119);
+        }
+
+
+        #loader {
+            position: absolute;
+            left: 52%;
+            top: 57%;
+            width: 50px;
+            height: 50px;
+            margin: -76px 0 0 -76px;
+            border: 13px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 13px solid #7798CF;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .container {
+            position: relative;
+            -webkit-animation-name: animatebottom;
+            -webkit-animation-duration: 1s;
+            animation-name: animatebottom;
+            animation-duration: 0.9s
+        }
+
+        @-webkit-keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0px;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+
+        #contador-caracteres {
+            margin-top: 5px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body onload="myFunction()">
+
+    <div id="loader"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <img src="static/img/logo.png" width="30" height="30" alt="MiTim-Logo">
+        <a class="navbar-brand" style="color: #f3f3f3; margin-left: 9px; font-size: 16px;">Reportes</a>
+        <div class="ml-auto">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a style="color: white; font-size: 14px;" class="nav-link dropdown-toggle"
+                        id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tipos de reportes
+                    </a>
+                    <div style="font-size: 14px;" class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/">Inspección</a>
+                        <a class="dropdown-item" href="/servicio">Servicio</a>
+                        <a class="dropdown-item disabled" href="#">Cotización</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <form action='/pdfinspeccion' id="formularioInspeccion" method='POST' enctype='multipart/form-data'>
+
+        <div id="inspeccionContent" class="container mt-5" style="display:none;">
+
+            <div style="margin-top: -30px;" class="row justify-content-center">
+
+                <div class="col-md-9">
+
+                    <div style="padding: 40px 40px 20px 40px;" class="content">
+
+                        <h4
+                            style="font-weight: bold; font-size: 25px; text-align: center; color: var(--morado); margin: 10px 0 22px 0; ">
+                            Reporte de inspección</h4>
+
+                        <div class="form-group">
+
+                            <label for='fecha_inspeccion'>Fecha de inspección</label>
+                            <input type='date' id='fecha_inspeccion' name='fecha_inspeccion' class="form-control"
+                                required min='2023-01-01'>
+                        </div>
+
+                        <div class="form-group">
+                            <label for='nombre_cliente'>Cliente</label>
+                            <input type='text' id='nombre_cliente' name='nombre_cliente' class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for='proveedor_asignado'>Proveedor asignado</label>
+                            <input type='text' id='proveedor_asignado' name='proveedor_asignado' class="form-control"
+                                required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for='servicio_solicitado'>Servicio</label>
+                                    <select id='servicio_solicitado' name='servicio_solicitado' class="form-control"
+                                        required>
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value='Mantenimiento'>Mantenimiento</option>
+                                        <option value='Reparación'>Reparación</option>
+                                        <option value='Instalación'>Instalación</option>
+                                        <option value='Plomería'>Plomería</option>
+                                        <option value='Electricidad'>Electricidad</option>
+                                        <option value='Limpieza'>Limpieza</option>
+                                        <option value='Pintura'>Pintura</option>
+                                        <option value='Jardinería'>Jardinería</option>
+                                        <option value='Remodelación'>Remodelación</option>
+                                        <option value='Handyman'>Handyman</option>
+                                        <option value='Fumigación'>Fumigación</option>
+                                        <option value='Acarreo'>Acarreo</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div id="hidden" class="form-group">
+                                    <label for='equipo_diagnosticado'>Equipo</label>
+                                    <select id='equipo_diagnosticado' name='equipo_diagnosticado' class="form-control">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value='Aire Acondicionado'>Aire Acondicionado</option>
+                                        <option value='Estufa'>Estufa</option>
+                                        <option value='Refrigeradora'>Refrigeradora</option>
+                                        <option value='Secadora'>Secadora</option>
+                                        <option value='Lavadora'>Lavadora</option>
+                                        <option value='Extractor de Grasa'>Extractor de Grasa</option>
+                                        <option value='Calentadora de Agua a Gas'>Calentadora de Agua a Gas</option>
+                                        <option value='Horno'>Horno</option>
+                                        <option value='Congelador'>Congelador</option>
+                                        <option value='Abanicos'>Abanicos</option>
+                                        <option value='Centro de Lavado'>Centro de Lavado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for='diagnostico'>Diagnóstico</label>
+                            <textarea style="height: 270px; resize: none;"
+                                placeholder="¿Qué se realizó en la inspección? ¿Qué se identificó? ¿Qué se debe realizar?"
+                                id='diagnostico' name='diagnostico' rows='4' cols='40' maxlength="1400"
+                                class="form-control" required></textarea>
+                            <div id="contador-caracteres">0 / 1400 caracteres</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for='evidencias'>Evidencias</label><br>
+                            <input type='file' id='evidencias' name='evidencias' accept=".jpg, .jpeg, .png" multiple
+                                onchange="limitFileSelection(this)" style="border-radius: 0;"></input>
+                        </div>
+
+                    </div>
+
+                    <input style="height: 50px;" onclick="manejoErrores()" type='submit' value='Generar reporte (.pdf)'
+                        class="btn 
+                    btn-primary">
+
+                </div>
+            </div>
+
+    </form>
+
+    </div>
+
+
+
+    <script>
+
+
+
+        // Límite de fecha: fecha actual
+        document.addEventListener('DOMContentLoaded', function () {
+            var fechaHoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha_inspeccion').setAttribute('max', fechaHoy);
+        });
+
+
+
+        document.getElementById('servicio_solicitado').addEventListener('change', function () {
+            var selectedService = this.value;
+            var equipoField = document.getElementById('hidden');
+
+            if (selectedService === 'Mantenimiento' || selectedService === 'Reparación' || selectedService === 'Instalación') {
+                equipoField.style.display = 'block';
+            } else {
+                equipoField.style.display = 'none';
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const textarea = document.getElementById('diagnostico');
+            const contadorCaracteres = document.getElementById('contador-caracteres');
+
+            textarea.addEventListener('input', function () {
+                const longitudTexto = textarea.value.length;
+                contadorCaracteres.textContent = longitudTexto + ' / 1400 caracteres';
+
+            });
+        });
+
+
+
+        function manejoErrores() {
+            var notyf = new Notyf();
+            var fechaHoy = new Date().toISOString().split('T')[0];
+
+            if (
+                document.getElementById('fecha_inspeccion').value == '' ||
+                document.getElementById('nombre_cliente').value == '' ||
+                document.getElementById('proveedor_asignado').value == '' ||
+                document.getElementById('servicio_solicitado').value == '' ||
+                document.getElementById('diagnostico').value == ''
+            ) {
+                notyf.error('Por favor llena todos los campos.');
+
+            } else if (
+                document.getElementById('fecha_inspeccion').value < '2023-01-01' || document.getElementById('fecha_inspeccion').value > fechaHoy
+            ) {
+                notyf.error('Ingresa una fecha válida.');
+
+            } else
+                notyf.success('¡Reporte generado exitosamente!');
+        };
+
+
+        function myFunction() {
+            setTimeout(showPage, 1400);
+        }
+
+        function showPage() {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("inspeccionContent").style.display = "block";
+        }
+
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
